@@ -3,7 +3,7 @@
 const btns =  Object.create(null);
 btns.name = 'btns';
 const app = btns;
-app.version = '1.0';
+app.version = '1.0.1';
 app.orig = -1;
 app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 app.on = CKEDITOR.TRISTATE_ON;//1
@@ -144,14 +144,14 @@ app.sel_get = function()
 	app.sel.ck = app.ed.getSelection();
 	if (!app.sel.ck)
 	{
-		console.log(this.defs.name,'no a_sel_ck',a_sel_ck);
+		//noconsole.log(this.defs.name,'no a_sel_ck',a_sel_ck);
 		app.sel = null;
 		return;
 	}
 	app.sel.nat = app.sel.ck.getNative();
 	if (!app.sel.nat)
 	{
-		console.log(this.defs.name,'app.sel.nat',app.sel.nat);
+		//noconsole.log(this.defs.name,'app.sel.nat',app.sel.nat);
 		app.sel = null;
 		return;
 	}
@@ -159,24 +159,24 @@ app.sel_get = function()
 	app.sel.end = app.sel.nat.focusNode;
 	if (!app.sel.start || !app.sel.end)
 	{
-		console.log(this.defs.name,'bad sel',app.sel);
+		//noconsole.log(this.defs.name,'bad sel',app.sel);
 		app.sel = null;
 		return;
 	}
 	app.sel.el = app.sel.end.parentElement;
 	if (!app.sel.el)
 	{
-		console.log(this.defs.name,'no app.sel.el',app.sel.el);
+		//noconsole.log(this.defs.name,'no app.sel.el',app.sel.el);
 		app.sel = null;
 		return;
 	}
 	if (!app.sel.el.parentNode)
 	{
-		console.log(this.defs.name,'no app.sel.el.parentNode',app.sel.el.parentNode);
+		//noconsole.log(this.defs.name,'no app.sel.el.parentNode',app.sel.el.parentNode);
 		app.sel = null;
 		return;
 	}
-	console.log(this.defs.name,'got valid app.sel',app.sel);
+	//noconsole.log(this.defs.name,'got valid app.sel',app.sel);
 }
 app.sel_get = app.sel_get.bind({defs:{name:app.name+'.sel_upd'}});
 
@@ -243,13 +243,13 @@ cmds.txt.cmd.exec = function(a_editor)
 	}
 	if (!app.sel)
 	{
-		console.log(this.defs.name,'no sel',app.sel);
+		//noconsole.log(this.defs.name,'no sel',app.sel);
 		return;
 	}
-	console.log(this.defs.name,'sel is',app.sel);
+	//noconsole.log(this.defs.name,'sel is',app.sel);
 	if ( app.in_array(app.sel.el.localName,['body','html']) )
 	{
-		console.log(this.defs.name,'bad tag to replace:',app.sel.el.localName);
+		//noconsole.log(this.defs.name,'bad tag to replace:',app.sel.el.localName);
 		app.cmd_on(this);
 		return;
 	}
@@ -270,7 +270,7 @@ cmds.txt.cmd.exec = function(a_editor)
 //cmds.txt.evts.ev1={};
 //cmds.txt.evts.ev1.fn=function(a_event)
 //{
-	//console.log(this.defs.name,this,'a_event',a_event);
+	//noconsole.log(this.defs.name,this,'a_event',a_event);
 //};
 //cmds.txt.evts.ev1.on=['selectionChange'];
 /* txt end */
@@ -291,10 +291,10 @@ cmds.h1.cmd.exec = function(a_editor)
 	}
 	if (!app.sel)
 	{
-		console.log(this.defs.name,'no sel',app.sel);
+		//noconsole.log(this.defs.name,'no sel',app.sel);
 		return;
 	}
-	console.log(this.defs.name,'sel is',app.sel);
+	//noconsole.log(this.defs.name,'sel is',app.sel);
 	var newtag=null;
 	if ( app.cmd_last.tag_old === undefined )
 	{
@@ -323,13 +323,13 @@ cmds.h1.cmd.exec = function(a_editor)
 	{
 		if ( !range_str )
 		{
-			console.log(this.defs.name,'bad tag to replace:',app.sel.el.localName);
+			//noconsole.log(this.defs.name,'bad tag to replace:',app.sel.el.localName);
 			return;
 		}
 	}
 	if ( range_str )
 	{
-		console.log(this.defs.name,'going to tag',range_str, 'with', newtag);
+		//noconsole.log(this.defs.name,'going to tag',range_str, 'with', newtag);
 		range.deleteContents();
 		const newel = document.createElement(newtag);
 		newel.innerHTML =  range_str;
@@ -338,7 +338,7 @@ cmds.h1.cmd.exec = function(a_editor)
 	}
 	else
 	{
-		console.log(this.defs.name,'going to replace',app.sel.el.localName, 'with', newtag);
+		//noconsole.log(this.defs.name,'going to replace',app.sel.el.localName, 'with', newtag);
 		app.retag( app.sel.el, newtag );
 		app.sel.nat.modify("move", "forward", "character");
 		app.sel.nat.modify("move", "forward", "lineboundary");
@@ -357,10 +357,10 @@ const evts = app.evts;
 evts.ev1={};
 evts.ev1.fn=function(a_evt)
 {
-	console.log(this.defs.name,'a_evt',a_evt);
-	console.log(this.defs.name,'this.defs',this.defs);
+	//noconsole.log(this.defs.name,'a_evt',a_evt);
+	//noconsole.log(this.defs.name,'this.defs',this.defs);
 	app.sel_get();
-	console.log(this.defs.name,'new sel is',app.sel);
+	//noconsole.log(this.defs.name,'new sel is',app.sel);
 	for ( var cmd_key in app.cmds )
 	{
 		const cmd_name = app.cmds[cmd_key].cmd.defs.name;
@@ -371,13 +371,13 @@ evts.ev1.fn=function(a_evt)
 		}
 		if ( this.cmd_curr.state !== app.off )
 		{
-			console.log(this.defs.name,'set to off',this.cmd_curr);
+			//noconsole.log(this.defs.name,'set to off',this.cmd_curr);
 			app.cmd_off(this.cmd_curr);
 		}
 	}
 	if ( this.found )
 	{
-		console.log(this.defs.name,'this.found is',this.found);
+		//noconsole.log(this.defs.name,'this.found is',this.found);
 		app.cmd_on(this.found);
 		app.cmd_last = this.found;
 		this.found = null;
@@ -511,7 +511,7 @@ app.plg.init = function( a_editor )
 	}
 	//noconsole.log('-'.repeat(1), this.defs.name,'builded cmds',app.cmds)
 	a_editor.filter.allow( 'p h1 h2 h3 h4 h5 h6 br em a' );
-	//console.log( this.defs.name, 'a_editor.filter.allowedContent', a_editor.filter.allowedContent );
+	//noconsole.log( this.defs.name, 'a_editor.filter.allowedContent', a_editor.filter.allowedContent );
 	app.plg_ready = true;
 } // btns.init
 
