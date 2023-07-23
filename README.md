@@ -1,2 +1,2 @@
 # ckeditor_btns
-H1-H6 and Txt buttons for CKEditor4
+H1-H6, P and Txt buttons for CKEditor4
