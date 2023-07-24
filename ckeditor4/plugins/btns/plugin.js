@@ -1,3 +1,7 @@
+/* 
+Btns plugin
+https://github.com/sallecta/ckeditor_btns
+ */
 "use strict";
 
 const btns =  Object.create(null);
