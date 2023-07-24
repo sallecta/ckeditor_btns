@@ -3,7 +3,7 @@
 const btns =  Object.create(null);
 btns.name = 'btns';
 const app = btns;
-app.version = '1.0.1';
+app.version = '1.0.2';
 app.orig = -1;
 app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 app.on = CKEDITOR.TRISTATE_ON;//1
@@ -430,27 +430,24 @@ app.cmd_build.fn= function(a_cmd_key,a_cmd,a_editor)
 		}
 	}
 	//noconsole.log('-'.repeat(4),this.defs.name,'END building cmd',a_cmd_key,cmd_obj);
-	if ( a_cmd.recall && app.is_array(a_cmd.recall) )
+	if ( app.is_array(a_cmd.recall) && a_cmd.recall.length>0 )
 	{
-		if (a_cmd.recall.length>0)
+		app.cmd_build.cnt = app.cmd_build.cnt + 1;
+		if ( app.cmd_build.cnt >= app.cmd_build.limit )
 		{
-			app.cmd_build.cnt = app.cmd_build.cnt + 1;
-			if ( app.cmd_build.cnt >= app.cmd_build.limit )
-			{
-				//noconsole.log('-'.repeat(4), this.defs.name,'too much recursion',app.cmd_build.cnt,a_cmd_key);
-				return;
-			}
-			const new_cmd_key = a_cmd.recall.shift(); // return first and delete from src
-			app.create_cmd_struct(new_cmd_key,app.cmds);
-			const new_obj = app.cmds[new_cmd_key];
-			//Object.assign(new_obj, a_cmd);
-			Object.assign(new_obj.btn,a_cmd.btn);
-			Object.assign(new_obj.cmd,a_cmd.cmd);
-			Object.assign(new_obj.evts,a_cmd.evts);
-			new_obj.recall=a_cmd.recall;
-			//noconsole.log('-'.repeat(4),this.defs.name,'recall self with',new_cmd_key,new_obj);
-			app.cmd_build.fn(new_cmd_key,new_obj,a_editor);
+			//noconsole.log('-'.repeat(4), this.defs.name,'too much recursion',app.cmd_build.cnt,a_cmd_key);
+			return;
 		}
+		const new_cmd_key = a_cmd.recall.shift(); // return first and delete from src
+		app.create_cmd_struct(new_cmd_key,app.cmds);
+		const new_obj = app.cmds[new_cmd_key];
+		//Object.assign(new_obj, a_cmd);
+		Object.assign(new_obj.btn,a_cmd.btn);
+		Object.assign(new_obj.cmd,a_cmd.cmd);
+		Object.assign(new_obj.evts,a_cmd.evts);
+		new_obj.recall=a_cmd.recall;
+		//noconsole.log('-'.repeat(4),this.defs.name,'recall self with',new_cmd_key,new_obj);
+		app.cmd_build.fn(new_cmd_key,new_obj,a_editor);
 	}
 }; // app.cmd_build
 app.cmd_build.fn = app.cmd_build.fn.bind({defs:{name:app.name+'.cmd_build'}});
@@ -483,7 +480,7 @@ app.plg_icons = function()
 app.plg_icons=app.fn_defs({name:app.name+'.plg_icons'}, app.plg_icons);
 
 /* init plugin function */
-app.plg.defs = {name:app.name+'.plg.init'}
+app.plg.defs = {name:app.name+'.plg',version:app.version}
 app.plg.init = function( a_editor )
 {
 	if ( app.plg_ready ) { return; }

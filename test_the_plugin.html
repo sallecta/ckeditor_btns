@@ -2,20 +2,32 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Btns plugin for CKEditor4</title>
+	<title>Btns plugin for CKEditor4 demo</title>
 	<script src="ckeditor4/ckeditor.js"></script>
 	<script src="start_ckeditor.js"></script>
+	<style>body *{font: medium sans-serif; margin: 1.5rem;} </style>
 </head>
 <body id="main">
-
-	<div id="editor">
-		<p>Hello world!</p>
-		<h1>Heading 1</h1>
-		<p>I'm an instance of <a href="https://ckeditor.com">CKEditor</a>.</p>
-	</div>
+<h1 id="hdr">Btns plugin for CKEditor4 demo</h1>
+<div id="editor">
+	<p>Hello world!</p>
+	<h1>Heading 1</h1>
+	<p>I'm an instance of <a href="https://ckeditor.com">CKEditor</a>.</p>
+</div>
 
 <script>
 	start_ckeditor();
+	CKEDITOR.on('instanceReady', function()
+		{
+			const btns = CKEDITOR.instances.editor.plugins.btns;
+			console.log(btns);
+			const el = document.getElementById("hdr");
+			const ver = btns.defs.version;
+			const txt = el.innerHTML+' (version '+ver+' at CKEditor version '+CKEDITOR.version+')';
+			el.innerHTML = txt;
+			document.title = txt;
+		}
+	);
 </script>
 
 </body>
