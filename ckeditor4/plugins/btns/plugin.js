@@ -7,7 +7,7 @@ https://github.com/sallecta/ckeditor_btns
 const btns =  Object.create(null);
 btns.name = 'btns';
 const app = btns;
-app.version = '1.0.2';
+app.version = '1.0.3pre';
 app.orig = -1;
 app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 app.on = CKEDITOR.TRISTATE_ON;//1
@@ -315,6 +315,7 @@ cmds.h1.cmd.exec = function(a_editor)
 	if (app.sel.el.localName === this.defs.key)
 	{
 		newtag = app.cmd_last.tag_old;
+		var oldtag = true;
 	}
 	else if (app.sel.el.localName !== this.defs.key)
 	{
@@ -347,8 +348,17 @@ cmds.h1.cmd.exec = function(a_editor)
 		app.sel.nat.modify("move", "forward", "character");
 		app.sel.nat.modify("move", "forward", "lineboundary");
 	}
+	if ( oldtag )
+	{
+		//noconsole.log(this.defs.name,'newtag === app.cmd_last.tag_old',this);
+		app.cmd_off(this);
+	}
+	else
+	{
+		app.cmd_on(this);
+	}
+	app.evts.ev1.fn();
 	app.cmd_last=this;
-	app.cmd_on(this);
 	app.sel=null;
 };
 /* h1 end */
@@ -365,6 +375,7 @@ evts.ev1.fn=function(a_evt)
 	//noconsole.log(this.defs.name,'this.defs',this.defs);
 	app.sel_get();
 	//noconsole.log(this.defs.name,'new sel is',app.sel);
+	if (!a_evt) { a_evt={}; a_evt.editor = app.ed; }
 	for ( var cmd_key in app.cmds )
 	{
 		const cmd_name = app.cmds[cmd_key].cmd.defs.name;

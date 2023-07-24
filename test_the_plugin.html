@@ -20,7 +20,6 @@
 	CKEDITOR.on('instanceReady', function()
 		{
 			const btns = CKEDITOR.instances.editor.plugins.btns;
-			console.log(btns);
 			const el = document.getElementById("hdr");
 			const ver = btns.defs.version;
 			const txt = el.innerHTML+' (version '+ver+' at CKEditor version '+CKEDITOR.version+')';
