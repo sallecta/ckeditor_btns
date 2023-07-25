@@ -4,7 +4,6 @@
 	<meta charset="utf-8">
 	<title>Btns plugin for CKEditor4 demo</title>
 	<script src="ckeditor4/ckeditor.js"></script>
-	<script src="start_ckeditor.js"></script>
 	<style>body *{font: medium sans-serif; margin: 1.5rem;} </style>
 </head>
 <body id="main">
@@ -16,7 +15,8 @@
 </div>
 
 <script>
-	start_ckeditor();
+
+	CKEDITOR.replace( 'editor', {extraPlugins:'btns'} );
 	CKEDITOR.on('instanceReady', function()
 		{
 			const btns = CKEDITOR.instances.editor.plugins.btns;

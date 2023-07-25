@@ -14,5 +14,4 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'others' },
 		{ name: 'about' }
 	];
-	config.extraPlugins = 'btns';
 };
