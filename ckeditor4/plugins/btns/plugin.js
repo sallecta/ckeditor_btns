@@ -7,7 +7,7 @@ https://github.com/sallecta/ckeditor_btns
 const btns =  Object.create(null);
 btns.name = 'btns';
 const app = btns;
-app.version = '1.0.4pre';
+app.version = '1.0.4';
 app.orig = -1;
 app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 app.on = CKEDITOR.TRISTATE_ON;//1
