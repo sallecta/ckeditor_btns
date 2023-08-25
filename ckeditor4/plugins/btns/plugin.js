@@ -7,7 +7,7 @@ https://github.com/sallecta/ckeditor_btns
 const btns =  Object.create(null);
 btns.name = 'btns';
 const app = btns;
-app.version = '1.0.4';
+app.version = '1.0.5';
 app.orig = -1;
 app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 app.on = CKEDITOR.TRISTATE_ON;//1
@@ -421,6 +421,7 @@ app.cmd_build.fn= function(a_cmd_key,a_cmd,a_editor)
 	cmd_obj.btn.icon = cmd_name;
 	cmd_obj.btn.command = cmd_name;
 	cmd_obj.btn.label = a_editor.lang[app.name][a_cmd_key];
+	cmd_obj.btn.toolbar = 'basicstyles,100';
 	//noconsole.log('-'.repeat(6),this.defs.name,a_cmd_key,'creating btn', cmd_obj.btn);
 	a_editor.ui.addButton(cmd_obj.btn.name, cmd_obj.btn);
 	/* command */
