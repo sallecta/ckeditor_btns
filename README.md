@@ -14,7 +14,7 @@ config.extraPlugins = 'btns';
 
 ### Local file
 
-Download repository and open 'test_the_plugin.html' for demo.
+Download repository and open 'btns.html' for demo.
 
 
 ### Online demo
