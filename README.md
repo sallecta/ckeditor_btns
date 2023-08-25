@@ -18,6 +18,6 @@ Download repository and open 'test_the_plugin.html' for demo.
 
 
 ### Online demo
-http://sallecta.infinityfreeapp.com/ckeditor_btns/test_the_plugin.html
+http://sallecta.infinityfreeapp.com/ckeditor_btns/index.html
 
 
