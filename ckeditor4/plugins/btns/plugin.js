@@ -7,7 +7,7 @@ https://github.com/sallecta/ckeditor_btns
 const btns =  Object.create(null);
 btns.name = 'btns';
 const app = btns;
-app.version = '1.0.6';
+app.version = '1.0.7';
 app.orig = -1;
 app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 app.on = CKEDITOR.TRISTATE_ON;//1
@@ -469,7 +469,7 @@ app.cmd_build.fn= function(a_cmd_key,a_cmd,a_editor)
 app.cmd_build.fn = app.cmd_build.fn.bind({defs:{name:app.name+'.cmd_build'}});
 
 //
-app.plg_ready=false;
+//app.plg_ready=false;
 app.plg=Object.create(null);
 app.plg.lang='en,ru';
 app.plg.hidpi=true;
@@ -499,7 +499,7 @@ app.plg_icons=app.fn_defs({name:app.name+'.plg_icons'}, app.plg_icons);
 app.plg.defs = {name:app.name+'.plg',version:app.version}
 app.plg.init = function( a_editor )
 {
-	if ( app.plg_ready ) { return; }
+	//if ( app.plg_ready ) { return; }
 	
 	app.ed = a_editor;
 	//noconsole.log('-'.repeat(1), this.defs.name,'app.cmd_build.fn');
@@ -525,7 +525,7 @@ app.plg.init = function( a_editor )
 	//noconsole.log('-'.repeat(1), this.defs.name,'builded cmds',app.cmds)
 	a_editor.filter.allow( 'p h1 h2 h3 h4 h5 h6 br em a' );
 	//noconsole.log( this.defs.name, 'a_editor.filter.allowedContent', a_editor.filter.allowedContent );
-	app.plg_ready = true;
+	//app.plg_ready = true;
 } // btns.init
 
 "use strict";
