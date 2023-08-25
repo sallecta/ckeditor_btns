@@ -8,6 +8,5 @@ CKEDITOR.plugins.setLang( 'btns', 'ru', {
 		txt: 'Простой текст',
 		p: 'Параграф',
 	}
-	}
 );
 
