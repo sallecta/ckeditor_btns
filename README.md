@@ -18,7 +18,7 @@ config.extraPlugins = 'btns';
 
 ### Local file
 
-Download repository and open 'btns.html' for demo.
+Download repository and open 'index.html' for demo.
 
 ### Online demo
 https://sallecta.github.io/ckeditor_btns
