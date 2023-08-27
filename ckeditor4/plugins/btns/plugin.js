@@ -7,7 +7,7 @@ new function()
 {
 	const app =  Object.create(null);
 	app.name = 'btns';
-	app.version = '1.0.9';
+	app.version = '1.0.10';
 	app.orig = -1;
 	app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 	app.on = CKEDITOR.TRISTATE_ON;//1
@@ -45,12 +45,10 @@ new function()
 	
 	app.retag = function( a_el, a_tag, a_editor )
 	{
-		app.auto_p(a_editor, false);
 		var elnew = a_editor.document.createElement(a_tag);
 		const content = a_el.innerHTML;
 		elnew.$.innerHTML = content;
 		a_el.parentNode.replaceChild(elnew.$, a_el);
-		app.auto_p(a_editor);
 	};
 	app.retag = app.retag.bind({defs:{name:app.name+'.retag'}});
 	
@@ -185,24 +183,22 @@ new function()
 	}
 	app.sel_get = app.sel_get.bind({defs:{name:app.name+'.sel_upd'}});
 	
-	app.auto_p = function(a_editor,a_set=app.orig)
+	app.no_auto_p = function( a_editor, a_cmd )
 	{
-		const inst = a_editor[app.name];
-		if ( inst.orig_auto_p === undefined )
+		if ( !a_editor.commands[a_cmd.name] ) { return; }
+		const cfgval = a_editor.config.autoParagraph;
+		if ( cfgval === undefined || cfgval === true )
 		{
-			inst.orig_auto_p = a_editor.config.autoParagraph;
-		}
-		if ( a_set === app.orig )
-		{
-			a_editor.config.autoParagraph = app.orig_auto_p;
-		}
-		else if ( a_set === app.disabled )
-		{
+			const msg = 'Sorry, your autoParagraph '+
+				'config has just been set to false, '+
+				'to let '+a_cmd.name+' work correctly.'+"\n"+
+				'Enabling autoParagraph back will wrap in <p> tag '+
+				'all free text nodes.';
+			console.warn(this.defs.name,msg);
 			a_editor.config.autoParagraph = false;
 		}
-		//console.log('a_editor.config.autoParagraph',a_editor.config.autoParagraph);
 	}
-	app.auto_p = app.auto_p.bind({defs:{name:app.name+'.auto_p'}});
+	app.no_auto_p = app.no_auto_p.bind({defs:{name:app.name+'.no_auto_p'}});
 	
 	
 	app.cmd_on = function(a_cmd,a_editor)
@@ -252,6 +248,7 @@ new function()
 	cmds.txt.btn.toolbar='basicstyles',
 	cmds.txt.cmd.exec = function(a_editor)
 	{
+		app.no_auto_p( a_editor, this );
 		const inst = a_editor[app.name];
 		app.cmd_switch(this);
 		if ( !inst.sel )
@@ -272,17 +269,20 @@ new function()
 		}
 		//
 		const content = inst.sel.el.innerText;
-		app.auto_p( a_editor, app.disabled );
-		inst.sel.el.outerHTML=content;
-		//console.nolog(this.defs.name,'content outerHTML=',inst.sel.el.outerHTML);
-		app.auto_p( a_editor, app.orig );
-		//
-		//inst.sel.nat.modify("move", "forward", "character");
-		//inst.sel.nat.modify("move", "forward", "lineboundary");
-		//
+		const text_node = document.createTextNode(content);
+		inst.sel.el.parentNode.replaceChild(text_node, inst.sel.el);
+		//console.nolog(this.defs.name,'text_node',text_node );
+		inst.sel=null;
+		app.sel_get(a_editor);
+		
+		inst.sel.nat.modify("move", "forward", "character");
+		inst.sel.nat.modify("move", "forward", "lineboundary");
+		inst.sel.nat.modify("move", "backward", "character");
+		
 		inst.cmd_last=this;
 		app.cmd_on(this,a_editor);
 		inst.sel=null;
+		
 	};
 	// cmd may have own event functions
 	//cmds.txt.evts.ev1={};
@@ -534,6 +534,7 @@ new function()
 		
 		a_editor = a_editor;
 		a_editor[app.name]={};
+		
 		//noconsole.log('-'.repeat(1), this.defs.name,'app.cmd_build.fn');
 		for ( var cmd_key in app.cmds )
 		{
