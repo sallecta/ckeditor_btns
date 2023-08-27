@@ -7,7 +7,7 @@ new function()
 {
 	const app =  Object.create(null);
 	app.name = 'btns';
-	app.version = '1.0.8';
+	app.version = '1.0.9';
 	app.orig = -1;
 	app.disabled = CKEDITOR.TRISTATE_DISABLED;//0
 	app.on = CKEDITOR.TRISTATE_ON;//1
@@ -200,11 +200,12 @@ new function()
 		{
 			a_editor.config.autoParagraph = false;
 		}
+		//console.log('a_editor.config.autoParagraph',a_editor.config.autoParagraph);
 	}
 	app.auto_p = app.auto_p.bind({defs:{name:app.name+'.auto_p'}});
 	
 	
-	app.cmd_on = function(a_cmd=null)
+	app.cmd_on = function(a_cmd,a_editor)
 	{
 		if ( a_cmd )
 		{
@@ -212,7 +213,7 @@ new function()
 		}
 		else
 		{
-			this.cmd = app.cmd_last;
+			this.cmd = inst.cmd_last;
 		}
 		if ( !app.is_object(this.cmd) )
 		{
@@ -222,7 +223,7 @@ new function()
 	}
 	app.cmd_on = app.cmd_on.bind({defs:{name:app.name+'.cmd_on'}});
 	
-	app.cmd_off = function(a_cmd=null)
+	app.cmd_off = function(a_cmd, a_ed)
 	{
 		if ( a_cmd ) { this.cmd = a_cmd; }
 		else { this.cmd = app.cmd_last; }
@@ -251,35 +252,37 @@ new function()
 	cmds.txt.btn.toolbar='basicstyles',
 	cmds.txt.cmd.exec = function(a_editor)
 	{
+		const inst = a_editor[app.name];
 		app.cmd_switch(this);
-		if ( !app.sel )
+		if ( !inst.sel )
 		{
-			app.sel_get(a_editor);
+			inst.sel_get(a_editor);
 		}
-		if (!app.sel)
+		if (!inst.sel)
 		{
-			//noconsole.log(this.defs.name,'no sel',app.sel);
+			//noconsole.log(this.defs.name,'no sel',inst.sel);
 			return;
 		}
-		//noconsole.log(this.defs.name,'sel is',app.sel);
-		if ( app.in_array(app.sel.el.localName,['body','html']) )
+		//noconsole.log(this.defs.name,'sel is',inst.sel);
+		if ( app.in_array(inst.sel.el.localName,['body','html']) )
 		{
 			//noconsole.log(this.defs.name,'bad tag to replace:',app.sel.el.localName);
-			app.cmd_on(this);
+			app.cmd_on(this,a_editor);
 			return;
 		}
 		//
-		const eldata = app.sel.el.innerText;
+		const content = inst.sel.el.innerText;
 		app.auto_p( a_editor, app.disabled );
-		app.sel.el.outerHTML=eldata;
+		inst.sel.el.outerHTML=content;
+		//console.nolog(this.defs.name,'content outerHTML=',inst.sel.el.outerHTML);
 		app.auto_p( a_editor, app.orig );
 		//
-		app.sel.nat.modify("move", "forward", "character");
-		app.sel.nat.modify("move", "forward", "lineboundary");
+		//inst.sel.nat.modify("move", "forward", "character");
+		//inst.sel.nat.modify("move", "forward", "lineboundary");
 		//
-		app.cmd_last=this;
-		app.cmd_on(this);
-		app.sel=null;
+		inst.cmd_last=this;
+		app.cmd_on(this,a_editor);
+		inst.sel=null;
 	};
 	// cmd may have own event functions
 	//cmds.txt.evts.ev1={};
@@ -360,11 +363,11 @@ new function()
 		if ( oldtag )
 		{
 			//noconsole.log(this.defs.name,'newtag === app.cmd_last.tag_old',this);
-			app.cmd_off(this);
+			app.cmd_off(this,a_editor);
 		}
 		else
 		{
-			app.cmd_on(this);
+			app.cmd_on(this,a_editor);
 		}
 		app.evts.ev1.fn(a_editor);
 		inst.cmd_last=this;
@@ -415,20 +418,20 @@ new function()
 			if ( this.cmd_curr.state !== app.off )
 			{
 				//noconsole.log(this.defs.name,'set to off',this.cmd_curr);
-				app.cmd_off(this.cmd_curr);
+				app.cmd_off(this.cmd_curr,ed);
 			}
 		}
 		if ( this.found )
 		{
 			//noconsole.log(this.defs.name,'this.found is',this.found);
-			app.cmd_on(this.found);
+			app.cmd_on(this.found,ed);
 			inst.cmd_last = this.found;
 			this.found = null;
 		}
 		if ( app.in_array(inst.sel.el.localName,['body','html']) )
 		{
 			const cmd_name = app.cmds.txt.cmd.defs.name;
-			app.cmd_on(ed.commands[cmd_name]);
+			app.cmd_on(ed.commands[cmd_name],ed);
 			inst.cmd_last = ed.commands[cmd_name];
 		}
 	};
