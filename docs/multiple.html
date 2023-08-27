@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Btns plugin for CKEditor4. Multiple instances demo.</title>
+	<script src="../ckeditor4/ckeditor.js"></script>
+	<style>body *{font: small sans-serif; color:black; margin: 0 0 0.2rem 0} .edtrs {width: 10rem;}</style>
+</head>
+<body>
+<h1 id="hdr">Btns plugin for CKEditor4. Multiple instances demo</h1>
+<h2>Github: <a href="https://github.com/sallecta/ckeditor_btns">github.com/sallecta/ckeditor_btns</a></h2>
+<h2>Site: <a href="https://sallecta.github.io/ckeditor_btns/">sallecta.github.io/ckeditor_btns</a></h2>
+<h3>Main page: <a href="../index.html">visit</a></h3>
+<div id="editor1">
+	<p>CKEditor instance 1</p>
+</div>
+<div id="editor2">
+	<p>CKEditor instance 2</p>
+</div>
+
+<script>
+	CKEDITOR.replace( 'editor1', {extraPlugins:'btns'} );
+	CKEDITOR.replace( 'editor2', {extraPlugins:'btns'} );
+	CKEDITOR.btnsdemodone=false;
+	CKEDITOR.on('instanceReady', function()
+		{
+			if ( CKEDITOR.btnsdemodone ) { return; };
+			const btns = CKEDITOR.instances.editor1.plugins.btns;
+			const el = document.getElementById("hdr");
+			const ver = btns.defs.version;
+			const txt = el.innerHTML+' (version '+ver+' at CKEditor version '+CKEDITOR.version+')';
+			el.innerHTML = txt;
+			document.title = txt;
+			CKEDITOR.btnsdemodone=true;
+		}
+	);
+</script>
+
+</body>
+</html>
